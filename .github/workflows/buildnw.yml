@@ -48,10 +48,11 @@ jobs:
         run: rm nwjs-v0.55.0-linux-x64.tar.gz nwjs-v0.55.0-win-x64.zip nwjs-v0.55.0-linux-ia32.tar.gz nwjs-v0.55.0-win-ia32.zip nwjs-v0.55.0-osx-x64.zip
         
       - name: Rename and move NW.js directories
-      run: mv nwjs-v0.55.0-linux-x64 build/ecowisdom-linux-x64 && mv nwjs-v0.55.0-win-x64 build/ecowisdom-win-x64 && mv nwjs-v0.55.0-linux-ia32 build/ecowisdom-linux-ia32 && mv nwjs-v0.55.0-win-ia32 build/ecowisdon-win-ia32 && mv nwjs-v0.55.0-osx-x64/nwjs.app build/Ecowisdom.app
+        run: mv nwjs-v0.55.0-linux-x64 build/ecowisdom-linux-x64 && mv nwjs-v0.55.0-win-x64 build/ecowisdom-win-x64 && mv nwjs-v0.55.0-linux-ia32 build/ecowisdom-linux-ia32 && mv nwjs-v0.55.0-win-ia32 build/ecowisdon-win-ia32 && mv nwjs-v0.55.0-osx-x64/nwjs.app build/Ecowisdom.app
         
       - name: Create package.nw directories
         run: mkdir build/ecowisdom-linux-x64/package.nw && mkdir build/ecowisdom-win-x64/package.nw && mkdir build/ecowisdom-linux-ia32/package.nw && mkdir build/ecowisdom-win-ia32/package.nw && mkdir build/Ecowisdom.app/Contents/Resources/app.nw
+
       - name: Install dependencies
         run: npm i
         
