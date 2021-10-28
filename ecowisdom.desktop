@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Ecowisdom
+Comment=A game where the goal is the build a healthy ecosystem.
+Exec=ecowisdom
+Terminal=false
+Categories=Game;
