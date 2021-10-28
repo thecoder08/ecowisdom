@@ -1,0 +1,8 @@
+Package: ecowisdom
+Version: 1.0
+Section: custom
+Priority: optional
+Architecture: amd64
+Essential: no
+Maintainer: Lennon McLean
+Description: A game where the goal is to build a healthy ecosystem.
