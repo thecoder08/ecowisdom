@@ -9,7 +9,7 @@
   "author": "thecoder08",
   "license": "MIT",
   "dependencies": {
-    "@thecoder08/docuget": "^1.0.3",
+    "@thecoder08/docuget": "thecoder08/docuget",
     "chrome-apps-serialport": "^1.0.8",
     "simplex-noise": "^3.0.0"
   }
