@@ -1,4 +1,4 @@
-//var SerialPort = require('serialport');
+var SerialPort = require('chrome-apps-serialport').SerialPort;
 var fs = require('fs');
 var SimplexNoise = require('simplex-noise').SimplexNoise;
 //var port = new SerialPort('/dev/');
@@ -17,7 +17,7 @@ var tiles = [
   [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
 ];
 var selectedTile = {
-  x: 1,
+  x: 0,
   y: 0
 }
 var images = {
@@ -48,20 +48,23 @@ for (var row = 0; row < tiles.length; row++) {
     }
   }
 }
-var selectorImage = new Image();
-selectorImage.src = 'selector.png';
-var animalImage = new Image();
-animalImage.src = 'animal.png';
-animalImage.onload = function() {
-  for (var row = 0; row < tiles.length; row++) {
-    for (var collum = 0; collum < tiles[row].length; collum++) {
-      ctx.drawImage(images[tiles[row][collum].type], collum * 75, row * 75);
-      if (tiles[row][collum].containsAnimal) {
-        ctx.drawImage(animalImage, collum * 75, row * 75);
-      }
-      if ((selectedTile.y == row) && (selectedTile.x == collum)) {
-        ctx.drawImage(selectorImage, collum * 75, row * 75);
+function renderTiles() {
+  var selectorImage = new Image();
+  selectorImage.src = 'selector.png';
+  var animalImage = new Image();
+  animalImage.src = 'animal.png';
+  animalImage.onload = function() {
+    for (var row = 0; row < tiles.length; row++) {
+      for (var collum = 0; collum < tiles[row].length; collum++) {
+        ctx.drawImage(images[tiles[row][collum].type], collum * 75, row * 75);
+        if (tiles[row][collum].containsAnimal) {
+          ctx.drawImage(animalImage, collum * 75, row * 75);
+        }
+        if ((selectedTile.y == row) && (selectedTile.x == collum)) {
+          ctx.drawImage(selectorImage, collum * 75, row * 75);
+        }
       }
     }
   }
 }
+renderTiles();
