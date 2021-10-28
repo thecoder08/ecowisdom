@@ -6,6 +6,37 @@
   </head>
   <body>
     <h1>Ecowisdom</h1>
-    <p><a href="game.html">Start</a></p>
+    <p>Seed: <input placeholder="example seed" id="seed"></p>
+    <p>Joystick Port: <input placeholder="COM3" id="port"></p>
+    <p><button onclick="startGame();">Start</button></p>
+    <p id="ports">
+      Ports:<br>
+      COM1<br>
+      COM2<br>
+      COM3<br>
+      COM4<br>
+      COM5<br>
+      COM6<br>
+      COM7<br>
+      COM8<br>
+      COM9<br>
+    </p>
+    <script src="node_modules/@thecoder08/docuget/main.js"></script>
+    <script>
+      function startGame() {
+        document.location.href = '/game.html?seed=' + $('#seed').value + '&port=' + $('#port').value;
+      }
+      if (!(require('os').platform() == 'win32')) {
+        var cp = require('child_process');
+        cp.exec('ls /dev | grep tty', function(err, stdout, stderr) {
+          var devices = stdout.split('\n');
+          var deviceText = 'Ports:<br>';
+          for (var i = 0; i < devices.length; i++) {
+            deviceText += devices[i] + '<br>';
+            $('#ports').innerHTML = deviceText;
+          }
+        });
+      }
+    </script>
   </body>
 </html>

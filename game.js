@@ -1,11 +1,18 @@
+var seed = new URL(document.location.href).searchParams.get('seed');
+if (require('os').platform() == 'win32') {
+  port = new URL(document.location.href).searchParams.get('port');
+}
+else {
+  port = '/dev/' + new URL(document.location.href).searchParams.get('port');
+}
 var SerialPort = require('chrome-apps-serialport').SerialPort;
 var fs = require('fs');
 var SimplexNoise = require('simplex-noise').SimplexNoise;
-//var port = new SerialPort('/dev/');
+var joystick = new SerialPort(port);
 var canvas = $('#canvas');
 var ctx = canvas.getContext('2d');
 var tiles = [
-  [{ type: 'water', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
+  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
   [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
   [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
   [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
@@ -16,10 +23,7 @@ var tiles = [
   [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
   [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
 ];
-var selectedTile = {
-  x: 0,
-  y: 0
-}
+var selectedTile = { x: 0, y: 0 }
 var images = {
   'gravel': new Image(),
   'dirt': new Image(),
@@ -30,7 +34,7 @@ var images = {
 for (var image in images) {
   images[image].src = image + '.png';
 }
-var simplex = new SimplexNoise('example seed');
+var simplex = new SimplexNoise(seed);
 for (var row = 0; row < tiles.length; row++) {
   for (var collum = 0; collum < tiles[row].length; collum++) {
     var noise = simplex.noise2D(collum, row);
@@ -68,3 +72,28 @@ function renderTiles() {
   }
 }
 renderTiles();
+var buffer = '';
+joystick.on('data', function(data) {
+  for (var i = 0; i < data.toString().length; i++) {
+    buffer += data.toString().charAt(i);
+    if (data.toString().charAt(i) == '\n') {
+      console.log(buffer);
+      var joystickInput = JSON.parse(buffer);
+      if (joystickInput.x > 750) {
+        selectedTile.x++;
+      }
+      if (joystickInput.x < 250) {
+        selectedTile.x--;
+      }
+      if (joystickInput.y > 750) {
+        selectedTile.y++;
+      }
+      if (joystickInput.y < 250) {
+        selectedTile.y--;
+      }
+      // TODO: handle sw == 1
+      renderTiles();
+      buffer = '';
+    }
+  }
+});
