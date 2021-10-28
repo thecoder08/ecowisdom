@@ -57,7 +57,7 @@ jobs:
         run: npm i
         
       - name: Copy files to NW.js directories
-        run: cp -r !(build) build/ecowisdom-linux-x64/package.nw && cp -r !(build) build/ecowisdom-win-x64/package.nw && cp -r !(build) build/ecowisdom-linux-ia32/package.nw && cp -r !(build) build/ecowisdom-win-ia32/package.nw && cp -r !(build) build/Ecowisdom.app/Contents/Resources/app.nw
+        run: cp -r "!(build)" build/ecowisdom-linux-x64/package.nw && cp -r "!(build)" build/ecowisdom-win-x64/package.nw && cp -r "!(build)" build/ecowisdom-linux-ia32/package.nw && cp -r "!(build)" build/ecowisdom-win-ia32/package.nw && cp -r "!(build)" build/Ecowisdom.app/Contents/Resources/app.nw
         
       - name: Rename executables
         run: mv build/ecowisdom-linux-x64/nw build/ecowisdom-linux-x64/ecowisdom && mv build/ecowisdom-linux-ia32/nw build/ecowisdom-linux-ia32/ecowisdom && mv build/ecowisdom-win-x64/nw.exe build/ecowisdom-win-x64/ecowisdom.exe && mv build/ecowisdom-win-ia32/nw.exe build/ecowisdom-win-ia32/ecowisdom.exe
