@@ -1,4 +1,7 @@
+// initialization stuff
 var seed = new URL(document.location.href).searchParams.get('seed');
+console.log(seed);
+$('#seed').innerHTML = seed;
 if (require('os').platform() == 'win32') {
   port = new URL(document.location.href).searchParams.get('port');
 }
@@ -34,6 +37,7 @@ var images = {
 for (var image in images) {
   images[image].src = image + '.png';
 }
+// generate map using seed
 var simplex = new SimplexNoise(seed);
 for (var row = 0; row < tiles.length; row++) {
   for (var collum = 0; collum < tiles[row].length; collum++) {
@@ -52,6 +56,7 @@ for (var row = 0; row < tiles.length; row++) {
     }
   }
 }
+// render function
 function renderTiles() {
   var selectorImage = new Image();
   selectorImage.src = 'selector.png';
@@ -71,14 +76,16 @@ function renderTiles() {
     }
   }
 }
+// initial tile render
 renderTiles();
+// handle joystick input
 var buffer = '';
 joystick.on('data', function(data) {
   for (var i = 0; i < data.toString().length; i++) {
     buffer += data.toString().charAt(i);
     if (data.toString().charAt(i) == '\n') {
-      console.log(buffer);
       var joystickInput = JSON.parse(buffer);
+      // move selected tile
       if (joystickInput.x > 750) {
         selectedTile.x++;
       }
@@ -91,7 +98,21 @@ joystick.on('data', function(data) {
       if (joystickInput.y < 250) {
         selectedTile.y--;
       }
+      // screen wrapping
+      if (selectedTile.x == 10) {
+        selectedTile.x = 0;
+      }
+      if (selectedTile.x == -1) {
+        selectedTile.x = 9;
+      }
+      if (selectedTile.y == 10) {
+        selectedTile.y = 0;
+      }
+      if (selectedTile.y == -1) {
+        selectedTile.y = 9;
+      }
       // TODO: handle sw == 1
+      // render tiles
       renderTiles();
       buffer = '';
     }

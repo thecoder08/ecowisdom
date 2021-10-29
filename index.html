@@ -6,7 +6,7 @@
   </head>
   <body>
     <h1>Ecowisdom</h1>
-    <p>Seed: <input placeholder="example seed" id="seed"></p>
+    <p>Seed (optional): <input placeholder="example seed" id="seed"></p>
     <p>Joystick Port: <input placeholder="COM3" id="port"></p>
     <p><button onclick="startGame();">Start</button></p>
     <p id="ports">
@@ -23,8 +23,22 @@
     </p>
     <script src="node_modules/@thecoder08/docuget/main.js"></script>
     <script>
+      function makeid(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+      }
       function startGame() {
-        document.location.href = '/game.html?seed=' + $('#seed').value + '&port=' + $('#port').value;
+        if ($('#seed').value === '') {
+          document.location.href = '/game.html?seed=' + makeid(10) + '&port=' + $('#port').value;
+        }
+        else {
+          document.location.href = '/game.html?seed=' + $('#seed').value + '&port=' + $('#port').value;
+        }
       }
       if (!(require('os').platform() == 'win32')) {
         var cp = require('child_process');
