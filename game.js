@@ -37,11 +37,13 @@ for (var image in images) {
   images[image].src = image + '.png';
 }
 var selectedObject = 'animal';
+var newAnimals = 5;
+var newTrees = 5;
 // generate map using seed
 var simplex = new SimplexNoise(seed);
 for (var row = 0; row < tiles.length; row++) {
   for (var collum = 0; collum < tiles[row].length; collum++) {
-    var noise = simplex.noise2D(collum, row);
+    var noise = simplex.noise2D(collum / 10, row / 10);
     if ((noise > 0) && (noise < 0.5)) {
       tiles[row][collum].type = 'sand';
     }
@@ -113,14 +115,38 @@ joystick.on('data', function(data) {
       }
       if (joystickInput.sw) {
         if (tiles[selectedTile.y][selectedTile.x].type == 'water') {
-          alert('You can\'t place that there!');
+          $('#log').value = 'You can\'t place that there!\n' + $('#log').value;
         }
         else {
           if (selectedObject == 'animal') {
-            tiles[selectedTile.y][selectedTile.x].containsAnimal = true;
+            if (newAnimals > 0) {
+              if (tiles[selectedTile.y][selectedTile.x].containsAnimal) {
+                $('#log').value = 'There is already an animal there!\n' + $('#log').value;
+              }
+              else {
+                tiles[selectedTile.y][selectedTile.x].containsAnimal = true;
+                newAnimals--;
+                $('#animals').innerHTML = newAnimals;
+              }
+            }
+            else {
+              $('#log').value = 'No animals left!\n' + $('#log').value;
+            }
           }
           else {
-            tiles[selectedTile.y][selectedTile.x].type = 'tree';
+            if (newTrees > 0) {
+              if (tiles[selectedTile.y][selectedTile.x].type == 'tree') {
+                $('#log').value = 'There is already a tree there!\n' + $('#log').value;
+              }
+              else {
+                tiles[selectedTile.y][selectedTile.x].type = 'tree';
+                newTrees--;
+                $('#trees').innerHTML = newTrees;
+              }
+            }
+            else {
+              $('#log').value = 'No trees left!\n' + $('#log').value;
+            }
           }
         }
       }
