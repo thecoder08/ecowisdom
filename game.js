@@ -14,16 +14,16 @@ var joystick = new SerialPort(port);
 var canvas = $('#canvas');
 var ctx = canvas.getContext('2d');
 var tiles = [
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
-  [{ type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }, { type: 'dirt', containsAnimal: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
+  [{ type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }, { type: 'dirt', containsAnimal: false, containsShelter: false }],
 ];
 var selectedTile = { x: 0, y: 0 }
 var images = {
@@ -60,6 +60,8 @@ for (var row = 0; row < tiles.length; row++) {
 }
 // render function
 function renderTiles() {
+  var shelterImage = new Image();
+  shelterImage.src = 'shelter.png';
   var selectorImage = new Image();
   selectorImage.src = 'selector.png';
   var animalImage = new Image();
@@ -70,6 +72,9 @@ function renderTiles() {
         ctx.drawImage(images[tiles[row][collum].type], collum * 75, row * 75);
         if (tiles[row][collum].containsAnimal) {
           ctx.drawImage(animalImage, collum * 75, row * 75);
+        }
+        if (tiles[row][collum].containsShelter) {
+          ctx.drawImage(shelterImage, collum * 75, row * 75);
         }
         if ((selectedTile.y == row) && (selectedTile.x == collum)) {
           ctx.drawImage(selectorImage, collum * 75, row * 75);
@@ -120,13 +125,19 @@ joystick.on('data', function(data) {
         else {
           if (selectedObject == 'animal') {
             if (newAnimals > 0) {
-              if (tiles[selectedTile.y][selectedTile.x].containsAnimal) {
-                $('#log').value = 'There is already an animal there!\n' + $('#log').value;
+              if (tiles[selectedTile.y][selectedTile.x].containsShelter) {
+                $('#log').value = 'There is already a shelter there!\n' + $('#log').value;
               }
               else {
-                tiles[selectedTile.y][selectedTile.x].containsAnimal = true;
-                newAnimals--;
-                $('#animals').innerHTML = newAnimals;
+                if (tiles[selectedTile.y][selectedTile.x].type == 'tree') {
+                  tiles[selectedTile.y][selectedTile.x].containsAnimal = true;
+                  tiles[selectedTile.y][selectedTile.x].containsShelter = true;
+                  newAnimals--;
+                  $('#animals').innerHTML = newAnimals;
+                }
+                else {
+                  $('#log').value = 'You can only build shelters in trees!\n' + $('#log').value;
+                }
               }
             }
             else {
