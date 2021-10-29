@@ -1,6 +1,5 @@
 // initialization stuff
 var seed = new URL(document.location.href).searchParams.get('seed');
-console.log(seed);
 $('#seed').innerHTML = seed;
 if (require('os').platform() == 'win32') {
   port = new URL(document.location.href).searchParams.get('port');
@@ -37,6 +36,7 @@ var images = {
 for (var image in images) {
   images[image].src = image + '.png';
 }
+var selectedObject = 'animal';
 // generate map using seed
 var simplex = new SimplexNoise(seed);
 for (var row = 0; row < tiles.length; row++) {
@@ -111,10 +111,32 @@ joystick.on('data', function(data) {
       if (selectedTile.y == -1) {
         selectedTile.y = 9;
       }
-      // TODO: handle sw == 1
+      if (joystickInput.sw) {
+        if (tiles[selectedTile.y][selectedTile.x].type == 'water') {
+          alert('You can\'t place that there!');
+        }
+        else {
+          if (selectedObject == 'animal') {
+            tiles[selectedTile.y][selectedTile.x].containsAnimal = true;
+          }
+          else {
+            tiles[selectedTile.y][selectedTile.x].type = 'tree';
+          }
+        }
+      }
       // render tiles
       renderTiles();
       buffer = '';
     }
   }
 });
+// handle keypresses to change selected object
+document.onkeydown = function(event) {
+  console.log(event.code);
+  if (event.code == 'KeyA') {
+    selectedObject = 'animal';
+  }
+  if (event.code == 'KeyT') {
+    selectedObject = 'tree';
+  }
+}
