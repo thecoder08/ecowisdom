@@ -133,7 +133,6 @@ joystick.on('data', function(data) {
                   tiles[selectedTile.y][selectedTile.x].containsAnimal = true;
                   tiles[selectedTile.y][selectedTile.x].containsShelter = true;
                   newAnimals--;
-                  $('#animals').innerHTML = newAnimals;
                 }
                 else {
                   $('#log').value = 'You can only build shelters in trees!\n' + $('#log').value;
@@ -152,7 +151,6 @@ joystick.on('data', function(data) {
               else {
                 tiles[selectedTile.y][selectedTile.x].type = 'tree';
                 newTrees--;
-                $('#trees').innerHTML = newTrees;
               }
             }
             else {
@@ -160,16 +158,39 @@ joystick.on('data', function(data) {
             }
           }
         }
+        if ((newTrees == 0) && (newAnimals == 0)) {
+          $('#log').value = 'All objects have been placed, starting simulation.\n' + $('#log').value;
+          var bornTrees = 0;
+          var naturalDeadTrees = 0;
+          for (var row = 0; row < tiles.length; row++) {
+            for (var collum = 0; collum < tiles[row].length; collum++) {
+              if (tiles[row][collum].type == 'tree') {
+                bornTrees++;
+                if (Math.random() < 0.2) {
+                  naturalDeadTrees++;
+                }
+              }
+              if (tiles[row][collum].containsAnimal) {
+                if ((tiles[row][collum + 1].type == 'water') || (tiles[row][collum - 1].type == 'water') || (tiles[row + 1][collum].type == 'water') || (tiles[row - 1][collum].type == 'water')) {
+                  
+                }
+              }
+            }
+          }
+          $('#log').value = 'Simulation complete, ' + bornTrees + ' trees were born, ' + naturalDeadTrees + ' died naturally, ' + eatenTrees + ' were eaten.\n' + $('#log').value;
+          $('#log').value = bornAnimals + ' animals were born, ' + natuallyDeadAnimals + ' died naturally, ' + starvedAnimals + ' starved, ' + dyhydratedAnimals + ' dehydrated.\n' + $('#log').value;
+        }
       }
-      // render tiles
+      // render
       renderTiles();
+      $('#trees').innerHTML = newTrees;
+      $('#animals').innerHTML = newAnimals;
       buffer = '';
     }
   }
 });
 // handle keypresses to change selected object
 document.onkeydown = function(event) {
-  console.log(event.code);
   if (event.code == 'KeyA') {
     selectedObject = 'animal';
   }
