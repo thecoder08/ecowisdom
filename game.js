@@ -36,9 +36,9 @@ var images = {
 for (var image in images) {
   images[image].src = image + '.png';
 }
-var selectedObject = 'animal';
+var selectedObject = 'tree';
 var newAnimals = 5;
-var newTrees = 5;
+var newTrees = 10;
 // generate map using seed
 var simplex = new SimplexNoise(seed);
 for (var row = 0; row < tiles.length; row++) {
@@ -168,17 +168,57 @@ joystick.on('data', function(data) {
                 bornTrees++;
                 if (Math.random() < 0.2) {
                   naturalDeadTrees++;
+                  tiles[row][collum].type = 'dirt';
                 }
               }
               if (tiles[row][collum].containsAnimal) {
+                bornAnimals++;
                 if ((tiles[row][collum + 1].type == 'water') || (tiles[row][collum - 1].type == 'water') || (tiles[row + 1][collum].type == 'water') || (tiles[row - 1][collum].type == 'water')) {
-                  
+                  if (tiles[row][collum + 1].type == 'tree') {
+                    eatenTrees++;
+                    tiles[row][collum].containAnimal = false;
+                    tiles[row][collum + 1].containsAnimal = true;
+                    tiles[row][collum + 1].type = 'dirt';
+                  }
+                  else {
+                    if (tiles[row][collum - 1].type == 'tree') {
+                      eatenTrees++;
+                      tiles[row][collum].containAnimal = false;
+                      tiles[row][collum - 1].containsAnimal = true;
+                      tiles[row][collum - 1].type = 'dirt';
+                    }
+                    else {
+                      if (tiles[row + 1][collum].type == 'tree') {
+                        eatenTrees++;
+                        tiles[row][collum].containAnimal = false;
+                        tiles[row + 1][collum].containsAnimal = true;
+                        tiles[row + 1][collum].type = 'dirt';
+                      }
+                      else {
+                        if (tiles[row - 1][collum].type == 'tree') {
+                          eatenTrees++;
+                          tiles[row][collum].containAnimal = false;
+                          tiles[row - 1][collum].containsAnimal = true;
+                          tiles[row - 1][collum].type = 'dirt';
+                        }
+                        else {
+                          starvedAnimals++;
+                          tiles[row][collum].containsAnimal = false;
+                        }
+                      }
+                    }
+                  }
+                }
+                else {
+                  dehydratedAnimals++;
+                  tiles[row][collum].containsAnimal = false;
                 }
               }
             }
           }
+          bornAnimals = bornAnimals / 2;
           $('#log').value = 'Simulation complete, ' + bornTrees + ' trees were born, ' + naturalDeadTrees + ' died naturally, ' + eatenTrees + ' were eaten.\n' + $('#log').value;
-          $('#log').value = bornAnimals + ' animals were born, ' + natuallyDeadAnimals + ' died naturally, ' + starvedAnimals + ' starved, ' + dyhydratedAnimals + ' dehydrated.\n' + $('#log').value;
+          $('#log').value = bornAnimals + ' animals were born, ' + natuallyDeadAnimals + ' died naturally, ' + starvedAnimals + ' starved, ' + dehydratedAnimals + ' dehydrated.\n' + $('#log').value;
         }
       }
       // render
