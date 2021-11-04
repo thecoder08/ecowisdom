@@ -162,6 +162,11 @@ joystick.on('data', function(data) {
           $('#log').value = 'All objects have been placed, starting simulation.\n' + $('#log').value;
           var bornTrees = 0;
           var naturalDeadTrees = 0;
+          var eatenTrees = 0;
+          var bornAnimals = 0;
+          var naturalDeadAnimals = 0;
+          var starvedAnimals = 0;
+          var dehydratedAnimals = 0;
           for (var row = 0; row < tiles.length; row++) {
             for (var collum = 0; collum < tiles[row].length; collum++) {
               if (tiles[row][collum].type == 'tree') {
@@ -173,6 +178,10 @@ joystick.on('data', function(data) {
               }
               if (tiles[row][collum].containsAnimal) {
                 bornAnimals++;
+                if (Math.random() < 0.2) {
+                  naturalDeadAnimals++;
+                }
+                else {
                 if ((tiles[row][collum + 1].type == 'water') || (tiles[row][collum - 1].type == 'water') || (tiles[row + 1][collum].type == 'water') || (tiles[row - 1][collum].type == 'water')) {
                   if (tiles[row][collum + 1].type == 'tree') {
                     eatenTrees++;
@@ -213,12 +222,15 @@ joystick.on('data', function(data) {
                   dehydratedAnimals++;
                   tiles[row][collum].containsAnimal = false;
                 }
+                }
               }
             }
           }
           bornAnimals = bornAnimals / 2;
           $('#log').value = 'Simulation complete, ' + bornTrees + ' trees were born, ' + naturalDeadTrees + ' died naturally, ' + eatenTrees + ' were eaten.\n' + $('#log').value;
-          $('#log').value = bornAnimals + ' animals were born, ' + natuallyDeadAnimals + ' died naturally, ' + starvedAnimals + ' starved, ' + dehydratedAnimals + ' dehydrated.\n' + $('#log').value;
+          $('#log').value = bornAnimals + ' animals were born, ' + naturalDeadAnimals + ' died naturally, ' + starvedAnimals + ' starved, ' + dehydratedAnimals + ' dehydrated.\n' + $('#log').value;
+          newTrees = bornTrees - (naturalDeadTrees + eatenTrees);
+          newAnimals = bornAnimals - (naturalDeadAnimals + starvedAnimals + dehydratedAnimals);
         }
       }
       // render
