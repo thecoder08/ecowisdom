@@ -167,46 +167,48 @@ joystick.on('data', function(data) {
           var naturalDeadAnimals = 0;
           var starvedAnimals = 0;
           var dehydratedAnimals = 0;
-          for (var row = 0; row < tiles.length; row++) {
-            for (var collum = 0; collum < tiles[row].length; collum++) {
-              if (tiles[row][collum].type == 'tree') {
+          var oldtiles = tiles;
+          for (var row = 0; row < oldtiles.length; row++) {
+            for (var collum = 0; collum < oldtiles[row].length; collum++) {
+              if (oldtiles[row][collum].type == 'tree') {
                 bornTrees++;
-                if (Math.random() < 0.2) {
+                if (Math.random() < 0.1) {
                   naturalDeadTrees++;
                   tiles[row][collum].type = 'dirt';
                 }
               }
-              if (tiles[row][collum].containsAnimal) {
+              if (oldtiles[row][collum].containsAnimal) {
                 bornAnimals++;
-                if (Math.random() < 0.2) {
+                if (Math.random() < 0.1) {
                   naturalDeadAnimals++;
+                  tiles[row][collum].containsAnimal = false;
                 }
                 else {
-                if ((tiles[row][collum + 1].type == 'water') || (tiles[row][collum - 1].type == 'water') || (tiles[row + 1][collum].type == 'water') || (tiles[row - 1][collum].type == 'water')) {
-                  if (tiles[row][collum + 1].type == 'tree') {
+                if ((oldtiles[row][collum + 1].type == 'water') || (oldtiles[row][collum - 1].type == 'water') || (oldtiles[row + 1][collum].type == 'water') || (oldtiles[row - 1][collum].type == 'water')) {
+                  if (oldtiles[row][collum + 1].type == 'tree') {
                     eatenTrees++;
-                    tiles[row][collum].containAnimal = false;
+                    tiles[row][collum].containsAnimal = false;
                     tiles[row][collum + 1].containsAnimal = true;
                     tiles[row][collum + 1].type = 'dirt';
                   }
                   else {
-                    if (tiles[row][collum - 1].type == 'tree') {
+                    if (oldtiles[row][collum - 1].type == 'tree') {
                       eatenTrees++;
-                      tiles[row][collum].containAnimal = false;
+                      tiles[row][collum].containsAnimal = false;
                       tiles[row][collum - 1].containsAnimal = true;
                       tiles[row][collum - 1].type = 'dirt';
                     }
                     else {
-                      if (tiles[row + 1][collum].type == 'tree') {
+                      if (oldtiles[row + 1][collum].type == 'tree') {
                         eatenTrees++;
-                        tiles[row][collum].containAnimal = false;
+                        tiles[row][collum].containsAnimal = false;
                         tiles[row + 1][collum].containsAnimal = true;
                         tiles[row + 1][collum].type = 'dirt';
                       }
                       else {
-                        if (tiles[row - 1][collum].type == 'tree') {
+                        if (oldtiles[row - 1][collum].type == 'tree') {
                           eatenTrees++;
-                          tiles[row][collum].containAnimal = false;
+                          tiles[row][collum].containsAnimal = false;
                           tiles[row - 1][collum].containsAnimal = true;
                           tiles[row - 1][collum].type = 'dirt';
                         }
@@ -226,12 +228,15 @@ joystick.on('data', function(data) {
               }
             }
           }
-          bornAnimals = bornAnimals / 2;
+          bornAnimals = Math.round(bornAnimals / 2);
           $('#log').value = 'Simulation complete, ' + bornTrees + ' trees were born, ' + naturalDeadTrees + ' died naturally, ' + eatenTrees + ' were eaten.\n' + $('#log').value;
           $('#log').value = bornAnimals + ' animals were born, ' + naturalDeadAnimals + ' died naturally, ' + starvedAnimals + ' starved, ' + dehydratedAnimals + ' dehydrated.\n' + $('#log').value;
-          newTrees = bornTrees - (naturalDeadTrees + eatenTrees);
-          newAnimals = bornAnimals - (naturalDeadAnimals + starvedAnimals + dehydratedAnimals);
+          newTrees = bornTrees;
+          newAnimals = bornAnimals;
         }
+      }
+      if ((newAnimals < 0) || (newTrees < 0)) {
+        $('#log').value = 'You lose! Click back to reset.\n' + $('#log').value;
       }
       // render
       renderTiles();
@@ -249,4 +254,155 @@ document.onkeydown = function(event) {
   if (event.code == 'KeyT') {
     selectedObject = 'tree';
   }
+  // move selected tile
+  if (event.code == 'ArrowRight') {
+    selectedTile.x++;
+  }
+  if (event.code == 'ArrowLeft') {
+    selectedTile.x--;
+  }
+  if (event.code == 'ArrowDown') {
+    selectedTile.y++;
+  }
+  if (event.code == 'ArrowUp') {
+    selectedTile.y--;
+  }
+  // screen wrapping
+  if (selectedTile.x == 10) {
+    selectedTile.x = 0;
+  }
+  if (selectedTile.x == -1) {
+    selectedTile.x = 9;
+  }
+  if (selectedTile.y == 10) {
+    selectedTile.y = 0;
+  }
+  if (selectedTile.y == -1) {
+    selectedTile.y = 9;
+  }
+  if (event.code == 'Enter') {
+    if (tiles[selectedTile.y][selectedTile.x].type == 'water') {
+      $('#log').value = 'You can\'t place that there!\n' + $('#log').value;
+    }
+    else {
+      if (selectedObject == 'animal') {
+        if (newAnimals > 0) {
+          if (tiles[selectedTile.y][selectedTile.x].containsShelter) {
+            $('#log').value = 'There is already a shelter there!\n' + $('#log').value;
+          }
+          else {
+            if (tiles[selectedTile.y][selectedTile.x].type == 'tree') {
+              tiles[selectedTile.y][selectedTile.x].containsAnimal = true;
+              tiles[selectedTile.y][selectedTile.x].containsShelter = true;
+              newAnimals--;
+            }
+            else {
+              $('#log').value = 'You can only build shelters in trees!\n' + $('#log').value;
+            }
+          }
+        }
+        else {
+          $('#log').value = 'No animals left!\n' + $('#log').value;
+        }
+      }
+      else {
+        if (newTrees > 0) {
+          if (tiles[selectedTile.y][selectedTile.x].type == 'tree') {
+            $('#log').value = 'There is already a tree there!\n' + $('#log').value;
+          }
+          else {
+            tiles[selectedTile.y][selectedTile.x].type = 'tree';
+            newTrees--;
+          }
+        }
+        else {
+          $('#log').value = 'No trees left!\n' + $('#log').value;
+        }
+      }
+    }
+    if ((newTrees == 0) && (newAnimals == 0)) {
+      $('#log').value = 'All objects have been placed, starting simulation.\n' + $('#log').value;
+      var bornTrees = 0;
+      var naturalDeadTrees = 0;
+      var eatenTrees = 0;
+      var bornAnimals = 0;
+      var naturalDeadAnimals = 0;
+      var starvedAnimals = 0;
+      var dehydratedAnimals = 0;
+      var oldtiles = tiles;
+      for (var row = 0; row < oldtiles.length; row++) {
+        for (var collum = 0; collum < oldtiles[row].length; collum++) {
+          if (oldtiles[row][collum].type == 'tree') {
+            bornTrees++;
+            if (Math.random() < 0.1) {
+              naturalDeadTrees++;
+              tiles[row][collum].type = 'dirt';
+            }
+          }
+          if (oldtiles[row][collum].containsAnimal) {
+            bornAnimals++;
+            if (Math.random() < 0.1) {
+              naturalDeadAnimals++;
+              tiles[row][collum].containsAnimal = false;
+            }
+            else {
+            if ((oldtiles[row][collum + 1].type == 'water') || (oldtiles[row][collum - 1].type == 'water') || (oldtiles[row + 1][collum].type == 'water') || (oldtiles[row - 1][collum].type == 'water')) {
+              if (oldtiles[row][collum + 1].type == 'tree') {
+                eatenTrees++;
+                tiles[row][collum].containsAnimal = false;
+                tiles[row][collum + 1].containsAnimal = true;
+                tiles[row][collum + 1].type = 'dirt';
+              }
+              else {
+                if (oldtiles[row][collum - 1].type == 'tree') {
+                  eatenTrees++;
+                  tiles[row][collum].containsAnimal = false;
+                  tiles[row][collum - 1].containsAnimal = true;
+                  tiles[row][collum - 1].type = 'dirt';
+                }
+                else {
+                  if (oldtiles[row + 1][collum].type == 'tree') {
+                    eatenTrees++;
+                    tiles[row][collum].containsAnimal = false;
+                    tiles[row + 1][collum].containsAnimal = true;
+                    tiles[row + 1][collum].type = 'dirt';
+                  }
+                  else {
+                    if (oldtiles[row - 1][collum].type == 'tree') {
+                      eatenTrees++;
+                      tiles[row][collum].containsAnimal = false;
+                      tiles[row - 1][collum].containsAnimal = true;
+                      tiles[row - 1][collum].type = 'dirt';
+                    }
+                    else {
+                      starvedAnimals++;
+                      tiles[row][collum].containsAnimal = false;
+                    }
+                  }
+                }
+              }
+            }
+            else {
+              dehydratedAnimals++;
+              tiles[row][collum].containsAnimal = false;
+            }
+            }
+          }
+        }
+      }
+      bornAnimals = Math.round(bornAnimals / 2);
+      $('#log').value = 'Simulation complete, ' + bornTrees + ' trees were born, ' + naturalDeadTrees + ' died naturally, ' + eatenTrees + ' were eaten.\n' + $('#log').value;
+      $('#log').value = bornAnimals + ' animals were born, ' + naturalDeadAnimals + ' died naturally, ' + starvedAnimals + ' starved, ' + dehydratedAnimals + ' dehydrated.\n' + $('#log').value;
+      newTrees = bornTrees;
+      newAnimals = bornAnimals;
+    }
+  }
+  if ((newAnimals < 0) || (newTrees < 0)) {
+    $('#log').value = 'You lose! Click back to reset.\n' + $('#log').value;
+  }
+  // render
+  renderTiles();
+  $('#trees').innerHTML = newTrees;
+  $('#animals').innerHTML = newAnimals;
+  buffer = '';
 }
